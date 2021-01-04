@@ -46,7 +46,7 @@ namespace Volo.CmsKit.Admin.Tags
                 input.EntityType,
                 input.Name,
                 CurrentTenant?.Id);
-            
+
             return MapToGetOutputDto(tag);
         }
 
@@ -59,9 +59,10 @@ namespace Volo.CmsKit.Admin.Tags
 
             return MapToGetOutputDto(tag);
         }
-        protected override IQueryable<Tag> CreateFilteredQuery(TagGetListInput input)
+
+        protected override async Task<IQueryable<Tag>> CreateFilteredQueryAsync(TagGetListInput input)
         {
-            return base.CreateFilteredQuery(input)
+            return (await base.CreateFilteredQueryAsync(input))
                     .WhereIf(
                         !input.Filter.IsNullOrEmpty(),
                         x =>
