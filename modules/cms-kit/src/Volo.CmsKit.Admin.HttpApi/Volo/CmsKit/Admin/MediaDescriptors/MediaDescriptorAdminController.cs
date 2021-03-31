@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
+using Volo.Abp.Content;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
-using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.MediaDescriptors
 {
@@ -25,10 +24,9 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
         }
 
         [HttpPost]
-        [NonAction]
-        public virtual Task<MediaDescriptorDto> CreateAsync(CreateMediaInputStream inputStream)
+        public virtual Task<MediaDescriptorDto> CreateAsync(CreateMediaInput input)
         {
-            return MediaDescriptorAdminAppService.CreateAsync(inputStream);
+            return MediaDescriptorAdminAppService.CreateAsync(input);
         }
 
         [HttpDelete]
@@ -47,14 +45,17 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
                 return BadRequest();
             }
 
-            var inputStream = new CreateMediaInputStream(file.OpenReadStream())
-                              {
-                                  EntityType = entityType,
-                                  ContentType = file.ContentType,
-                                  Name = file.FileName
-                              };
-            
-            var mediaDescriptorDto = await MediaDescriptorAdminAppService.CreateAsync(inputStream);
+            var input = new CreateMediaInput
+            {
+                EntityType = entityType,
+                Name = file.FileName,
+                StreamContent = new RemoteStreamContent(file.OpenReadStream())
+                {
+                    ContentType = file.ContentType
+                }
+            };
+
+            var mediaDescriptorDto = await MediaDescriptorAdminAppService.CreateAsync(input);
             
             return StatusCode((int)HttpStatusCode.Created, mediaDescriptorDto);
         }

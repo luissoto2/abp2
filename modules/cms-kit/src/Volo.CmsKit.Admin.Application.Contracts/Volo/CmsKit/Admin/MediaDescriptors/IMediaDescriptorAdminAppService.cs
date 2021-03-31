@@ -6,7 +6,7 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
 {
     public interface IMediaDescriptorAdminAppService : IApplicationService
     {
-        Task<MediaDescriptorDto> CreateAsync(CreateMediaInputStream inputStream);
+        Task<MediaDescriptorDto> CreateAsync(CreateMediaInput input);
         
         Task DeleteAsync(Guid id);
     }

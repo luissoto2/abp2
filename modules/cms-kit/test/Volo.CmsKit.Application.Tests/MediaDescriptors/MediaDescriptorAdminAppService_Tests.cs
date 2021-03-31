@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp.Content;
 using Volo.CmsKit.Admin.MediaDescriptors;
 using Xunit;
 
@@ -31,14 +32,17 @@ namespace Volo.CmsKit.MediaDescriptors
 
             using var stream = new MemoryStream(Encoding.UTF8.GetBytes(mediaContent));
 
-            var inputStream = new CreateMediaInputStream(stream)
+            var input = new CreateMediaInput
             {
-                ContentType = mediaType,
                 Name = mediaName,
-                EntityType = _cmsKitTestData.Media_1_EntityType
+                EntityType = _cmsKitTestData.Media_1_EntityType,
+                StreamContent = new RemoteStreamContent(stream)
+                {
+                    ContentType = mediaType
+                }
             };
 
-            var media = await _mediaDescriptorAdminAppService.CreateAsync(inputStream);
+            var media = await _mediaDescriptorAdminAppService.CreateAsync(input);
             
             media.ShouldNotBeNull();
         }

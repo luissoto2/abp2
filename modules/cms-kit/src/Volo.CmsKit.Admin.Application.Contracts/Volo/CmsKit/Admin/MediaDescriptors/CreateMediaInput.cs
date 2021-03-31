@@ -1,12 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.IO;
 using Volo.Abp.Content;
 using Volo.Abp.Validation;
 using Volo.CmsKit.MediaDescriptors;
 
 namespace Volo.CmsKit.Admin.MediaDescriptors
 {
-    public class CreateMediaInputStream : RemoteStreamContent
+    public class CreateMediaInput
     {
         [Required]
         [DynamicStringLength(typeof(MediaDescriptorConsts), nameof(MediaDescriptorConsts.MaxEntityTypeLength))]
@@ -15,9 +14,9 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
         [Required]
         [DynamicStringLength(typeof(MediaDescriptorConsts), nameof(MediaDescriptorConsts.MaxNameLength))]
         public string Name { get; set; }
-
-        public CreateMediaInputStream(Stream stream) : base(stream)
-        {
-        }
+        
+        [DisableValidation]
+        [From]
+        public RemoteStreamContent StreamContent { get; set; }
     }
 }
