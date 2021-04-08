@@ -21,7 +21,7 @@
     <abp-script src="/Pages/CmsKit/Blogs/index.js" />
     <abp-script src="/Pages/CmsKit/Blogs/createModal.js" />
     <abp-script src="/Pages/CmsKit/Blogs/updateModal.js" />
-    <abp-script type="typeof(SlugifyScriptContributor)"/>
+    <abp-script type="typeof(SlugifyScriptContributor)" />
 </abp-script-bundle>
 }
 
@@ -31,8 +31,18 @@
 
 <div id="CmsKitBlogsWrapper">
     <abp-card>
+        <abp-card-header>
+            <abp-row>
+                <abp-column size-md="_6">
+                    <abp-card-title>@L["Blogs"]</abp-card-title>
+                </abp-column>
+                <abp-column size-md="_6" class="text-right">
+                    @await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new { pageName = typeof(IndexModel).FullName })
+                </abp-column>
+            </abp-row>
+        </abp-card-header>
         <abp-card-body>
-            <abp-table striped-rows="true" id="BlogsTable" class="nowrap"></abp-table>
+            <abp-table striped-rows="true" class="nowrap"></abp-table>
         </abp-card-body>
     </abp-card>
 </div>
